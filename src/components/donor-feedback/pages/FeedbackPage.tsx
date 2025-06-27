@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Star, Search, Filter, Eye } from 'lucide-react';
+import { FeedbackService } from '../services/feedback.service';
 
 const FeedbackPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,41 +15,7 @@ const FeedbackPage = () => {
   const [filterRating, setFilterRating] = useState('all');
 
   // Mock data - trong thực tế sẽ lấy từ API
-  const feedbackData = [
-    {
-      id: '1',
-      type: 'donation',
-      donationId: 'DN001',
-      name: 'Nguyễn Văn A',
-      email: 'nguyenvana@email.com',
-      overallRating: 5,
-      date: '2024-01-15',
-      status: 'new',
-      summary: 'Trải nghiệm rất tốt, nhân viên nhiệt tình'
-    },
-    {
-      id: '2', 
-      type: 'general',
-      donationId: null,
-      name: 'Trần Thị B',
-      email: 'tranthib@email.com',
-      overallRating: 4,
-      date: '2024-01-14',
-      status: 'reviewed',
-      summary: 'Website dễ sử dụng, cần cải thiện tốc độ'
-    },
-    {
-      id: '3',
-      type: 'donation',
-      donationId: 'DN002',
-      name: 'Lê Văn C',
-      email: 'levanc@email.com',
-      overallRating: 3,
-      date: '2024-01-13',
-      status: 'responded',
-      summary: 'Thời gian chờ hơi lâu nhưng nhân viên tốt'
-    }
-  ];
+  const [feedbackData, setFeedbackData] = useState(() => FeedbackService.getFeedbackList());
 
   const RatingDisplay = ({ rating }: { rating: number }) => (
     <div className="flex gap-1">
@@ -79,7 +45,7 @@ const FeedbackPage = () => {
       <Badge variant="outline" className="text-blue-600 border-blue-200">Tổng quát</Badge>;
   };
 
-  const filteredData = feedbackData.filter(item => {
+  const filteredData = (feedbackData as any[]).filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (item.donationId && item.donationId.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -212,7 +178,7 @@ const FeedbackPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredData.map((item) => (
+                {filteredData.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       <div>

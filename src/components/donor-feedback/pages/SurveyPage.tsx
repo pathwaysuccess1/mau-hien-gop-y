@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,16 +8,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { FileText, Star, Send } from 'lucide-react';
+import { FileText, Send } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { useFeedback } from '../hooks/useFeedback';
+import { SurveyFormData } from '../types/feedback.types';
 
 const SurveyPage = () => {
-  const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const surveyId = searchParams.get('surveyId') || 'general';
+  const { submitSurvey, isSubmitting } = useFeedback();
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SurveyFormData>({
     surveyId,
     respondentInfo: {
       age: '',
@@ -28,7 +30,7 @@ const SurveyPage = () => {
       firstTime: '',
       frequency: '',
       lastDonation: '',
-      motivations: [] as string[]
+      motivations: []
     },
     experience: {
       awarenessSource: '',
@@ -42,7 +44,7 @@ const SurveyPage = () => {
       overallSatisfaction: '',
       recommendationLikelihood: '',
       improvementSuggestions: '',
-      additionalServices: [] as string[]
+      additionalServices: []
     },
     demographics: {
       educationLevel: '',
@@ -57,7 +59,7 @@ const SurveyPage = () => {
     }
   });
 
-  const handleInputChange = (section: keyof typeof formData, field: string, value: string | string[]) => {
+  const handleInputChange = (section: keyof SurveyFormData, field: string, value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
       [section]: {
@@ -67,7 +69,7 @@ const SurveyPage = () => {
     }));
   };
 
-  const handleCheckboxChange = (section: keyof typeof formData, field: string, value: string, checked: boolean) => {
+  const handleCheckboxChange = (section: keyof SurveyFormData, field: string, value: string, checked: boolean) => {
     setFormData(prev => {
       const currentSection = prev[section] as any;
       const currentArray = currentSection[field] as string[] || [];
@@ -85,14 +87,9 @@ const SurveyPage = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Survey submitted:', formData);
-    
-    toast({
-      title: "Cảm ơn bạn đã tham gia khảo sát!",
-      description: "Thông tin của bạn sẽ giúp chúng tôi cải thiện dịch vụ hiến máu.",
-    });
+    await submitSurvey(formData);
   };
 
   const RatingScale = ({ 
@@ -101,7 +98,7 @@ const SurveyPage = () => {
     value, 
     labels 
   }: { 
-    section: string, 
+    section: keyof SurveyFormData, 
     field: string, 
     value: string, 
     labels: string[] 
@@ -403,11 +400,12 @@ const SurveyPage = () => {
           <div className="text-center pt-6">
             <Button 
               type="submit" 
+              disabled={isSubmitting}
               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
               size="lg"
             >
               <Send className="w-5 h-5 mr-2" />
-              Gửi Khảo Sát
+              {isSubmitting ? 'Đang gửi...' : 'Gửi Khảo Sát'}
             </Button>
           </div>
         </form>
