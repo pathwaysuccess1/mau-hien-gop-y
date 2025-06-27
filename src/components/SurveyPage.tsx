@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Survey, Star, Send } from 'lucide-react';
+import { FileText, Star, Send } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 
 const SurveyPage = () => {
@@ -58,19 +57,20 @@ const SurveyPage = () => {
     }
   });
 
-  const handleInputChange = (section: string, field: string, value: string | string[]) => {
+  const handleInputChange = (section: keyof typeof formData, field: string, value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
       [section]: {
-        ...prev[section as keyof typeof prev],
+        ...prev[section],
         [field]: value
       }
     }));
   };
 
-  const handleCheckboxChange = (section: string, field: string, value: string, checked: boolean) => {
+  const handleCheckboxChange = (section: keyof typeof formData, field: string, value: string, checked: boolean) => {
     setFormData(prev => {
-      const currentArray = prev[section as keyof typeof prev][field as keyof any] as string[] || [];
+      const currentSection = prev[section] as any;
+      const currentArray = currentSection[field] as string[] || [];
       const newArray = checked 
         ? [...currentArray, value]
         : currentArray.filter(item => item !== value);
@@ -78,7 +78,7 @@ const SurveyPage = () => {
       return {
         ...prev,
         [section]: {
-          ...prev[section as keyof typeof prev],
+          ...prev[section],
           [field]: newArray
         }
       };
@@ -131,7 +131,7 @@ const SurveyPage = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex justify-center items-center gap-3 mb-4">
-            <Survey className="w-12 h-12 text-green-500" />
+            <FileText className="w-12 h-12 text-green-500" />
             <h1 className="text-4xl font-bold text-green-700">Khảo Sát Hiến Máu</h1>
           </div>
           <p className="text-lg text-gray-600">

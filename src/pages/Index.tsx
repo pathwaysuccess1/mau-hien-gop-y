@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, MessageSquare, BarChart3, Survey } from 'lucide-react';
+import { Heart, MessageSquare, BarChart3, FileText } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -62,7 +61,7 @@ const Index = () => {
             <Link to="/survey">
               <CardHeader className="text-center pb-2">
                 <div className="mx-auto mb-4 p-3 bg-green-100 rounded-full w-fit">
-                  <Survey className="w-8 h-8 text-green-600" />
+                  <FileText className="w-8 h-8 text-green-600" />
                 </div>
                 <CardTitle className="text-green-700">Khảo Sát Chi Tiết</CardTitle>
                 <CardDescription>
