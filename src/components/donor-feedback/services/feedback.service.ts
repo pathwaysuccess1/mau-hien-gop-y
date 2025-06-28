@@ -8,7 +8,9 @@ import {
   SurveyResponse,
   FeedbackForm,
   FeedbackCategory,
-  FeedbackStatus
+  FeedbackStatus,
+  DonationFeedbackFormData,
+  GeneralFeedbackFormData
 } from '../types/feedback.types';
 
 export class FeedbackService {
@@ -134,7 +136,11 @@ export class FeedbackService {
           { date: '2024-01-02', count: 15, averageRating: 4.3 },
           { date: '2024-01-03', count: 18, averageRating: 4.2 }
         ],
-        responseRate: 78.5
+        responseRate: 78.5,
+        staffRatingAverage: 4.3,
+        facilityRatingAverage: 4.1,
+        processRatingAverage: 4.4,
+        recommendationRate: 85.2
       };
 
       return mockData;
@@ -208,6 +214,28 @@ export class FeedbackService {
       return true;
     } catch (error) {
       console.error('Error submitting feedback:', error);
+      return false;
+    }
+  }
+
+  static async submitDonationFeedback(data: DonationFeedbackFormData): Promise<boolean> {
+    try {
+      console.log('Donation feedback submitted:', data);
+      // Here you would typically send data to your backend
+      return true;
+    } catch (error) {
+      console.error('Error submitting donation feedback:', error);
+      return false;
+    }
+  }
+
+  static async submitGeneralFeedback(data: GeneralFeedbackFormData): Promise<boolean> {
+    try {
+      console.log('General feedback submitted:', data);
+      // Here you would typically send data to your backend
+      return true;
+    } catch (error) {
+      console.error('Error submitting general feedback:', error);
       return false;
     }
   }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -138,7 +137,7 @@ const FeedbackPage = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="text-2xl font-bold text-red-600">
-                  {Object.values(dashboardData.statusBreakdown).reduce((a, b) => a + b, 0)}
+                  {dashboardData ? Object.values(dashboardData.statusBreakdown).reduce((a: number, b: number) => a + b, 0) : 0}
                 </div>
                 <p className="text-sm text-gray-600">Tổng số phản hồi</p>
               </CardContent>

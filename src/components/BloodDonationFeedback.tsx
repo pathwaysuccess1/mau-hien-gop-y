@@ -7,9 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Heart, Send } from 'lucide-react';
-import PersonalInfoSection from './PersonalInfoSection';
-import FeedbackSection from './FeedbackSection';
-import RatingStars from './RatingStars';
 
 const BloodDonationFeedback = () => {
   const [formData, setFormData] = useState({
@@ -45,6 +42,27 @@ const BloodDonationFeedback = () => {
     console.log('Feedback submitted:', formData);
   };
 
+  const RatingStars = ({ rating, onRatingChange }: { rating: string; onRatingChange: (value: string) => void }) => {
+    return (
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            onClick={() => onRatingChange(star.toString())}
+            className={`w-8 h-8 transition-colors ${
+              parseInt(rating) >= star
+                ? 'text-yellow-400 fill-current'
+                : 'text-gray-300 hover:text-yellow-300'
+            }`}
+          >
+            ⭐
+          </button>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
@@ -67,11 +85,44 @@ const BloodDonationFeedback = () => {
           </CardHeader>
           <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <PersonalInfoSection 
-                formData={formData} 
-                onInputChange={handleInputChange} 
-              />
+              {/* Personal Info Section */}
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                  Thông Tin Cá Nhân
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Họ và tên</Label>
+                    <Input
+                      id="fullName"
+                      value={formData.fullName}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
+                      placeholder="Nhập họ và tên"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="Nhập email"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Số điện thoại</Label>
+                  <Input
+                    id="phone"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    placeholder="Nhập số điện thoại"
+                  />
+                </div>
+              </div>
               
+              {/* Donation Info Section */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">
                   Thông Tin Hiến Máu
@@ -107,6 +158,7 @@ const BloodDonationFeedback = () => {
                 </div>
               </div>
 
+              {/* Rating Section */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">
                   Đánh Giá Dịch Vụ
@@ -127,10 +179,32 @@ const BloodDonationFeedback = () => {
                 ))}
               </div>
 
-              <FeedbackSection 
-                formData={formData} 
-                onInputChange={handleInputChange} 
-              />
+              {/* Feedback Section */}
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">
+                  Phản Hồi Chi Tiết
+                </h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="improvements">Đề xuất cải thiện</Label>
+                    <Textarea
+                      id="improvements"
+                      value={formData.improvements}
+                      onChange={(e) => handleInputChange('improvements', e.target.value)}
+                      placeholder="Bạn có đề xuất gì để cải thiện dịch vụ?"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="additionalComments">Nhận xét thêm</Label>
+                    <Textarea
+                      id="additionalComments"
+                      value={formData.additionalComments}
+                      onChange={(e) => handleInputChange('additionalComments', e.target.value)}
+                      placeholder="Có điều gì khác bạn muốn chia sẻ?"
+                    />
+                  </div>
+                </div>
+              </div>
 
               <div className="text-center pt-6">
                 <Button 
